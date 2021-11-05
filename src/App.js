@@ -15,18 +15,21 @@ function App() {
         <nav>
           <ul>
             <li>
-              <Link to="/NewStudent">Create new Student </Link>
+              <Link to="/">HomePage</Link>
             </li>
             <li>
               <Link to="/NewMentor">Create new Mentor</Link>
             </li>
             <li>
-              <Link to="/ChangeMentorforStudent">
-                Change Mentor for student
-              </Link>
+              <Link to="/NewStudent">Create new Student </Link>
             </li>
             <li>
               <Link to="/AddStudentstoMentor">Add Students to Mentor</Link>
+            </li>
+            <li>
+              <Link to="/ChangeMentorforStudent">
+                Change Mentor for student
+              </Link>
             </li>
             <li>
               <Link to="/AllStudentsforEachMentor">
@@ -35,6 +38,7 @@ function App() {
             </li>
           </ul>
         </nav>
+        <hr />
 
         <Routes>
           <Route path="/NewStudent" element={<NewStudent />} />

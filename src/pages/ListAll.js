@@ -1,25 +1,92 @@
 import React, { useEffect, useState } from "react";
-import List from "../config/ListAll";
+import ListData from "../config/ListAll";
 
 const ListAll = () => {
   useEffect(() => {
-    List().then(({ student, mentor }) => {
-      setMentor(mentor);
-      setStudent(student);
+    ListData().then(({ student, mentor }) => {
+      setMentorState(mentor);
+      setStudentState(student);
     });
   }, []);
-  const [studentState, setStudent] = useState(null);
-  const [mentorState, setMentor] = useState(null);
-  console.log("student", studentState);
-  console.log("mentor", mentorState);
+  const [studentState, setStudentState] = useState(null);
+  const [mentorState, setMentorState] = useState(null);
+
   return (
-    <div className="container">
+    <div className="container ">
       <div className="row">
         <div className="col">
           {/* list students */}
-          {studentState ? JSON.stringify(studentState) : ""}
+          {studentState ? (
+            <>
+              <h2>Student Data</h2>
+              <table className="table table-success table-striped">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Course</th>
+                    <th>Mentor</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {studentState.map((stud) => {
+                    return (
+                      <tr key={stud.id}>
+                        <td>{stud.name}</td>
+                        <td>{stud.email}</td>
+                        <td>{stud.course}</td>
+                        <td>
+                          {stud.mentorAssigned
+                            ? stud.mentorAssigned
+                            : "Not Assigned"}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </>
+          ) : (
+            "Loading....."
+          )}
         </div>
-        <div className="col">{/* list mentors */}</div>
+        <hr />
+        <div className="col">
+          {/* list mentors */}
+          {mentorState ? (
+            <>
+              <h2>Mentor Data</h2>
+              <table className="table table-success table-striped">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Expertise</th>
+                    <th>Students</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {mentorState.map((ment) => {
+                    return (
+                      <tr key={ment.id}>
+                        <td>{ment.name}</td>
+                        <td>{ment.email}</td>
+                        <td>{ment.expertise}</td>
+                        <td>
+                          {ment.studentsAssigned.length > 0
+                            ? "Assigned"
+                            : "Not Assigned"}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </>
+          ) : (
+            "Loading....."
+          )}
+        </div>
       </div>
     </div>
   );
