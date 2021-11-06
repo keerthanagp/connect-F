@@ -9,7 +9,7 @@ const ListAll = async () => {
     mentor: mentor.data,
     student: student.data,
   };
-  console.log(result, "result");
+
   return result;
 };
 

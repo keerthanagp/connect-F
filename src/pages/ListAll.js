@@ -6,8 +6,13 @@ const ListAll = () => {
     ListData().then(({ student, mentor }) => {
       setMentorState(mentor);
       setStudentState(student);
+      return () => {
+        setMentorState("");
+        setStudentState("");
+      };
     });
   }, []);
+
   const [studentState, setStudentState] = useState(null);
   const [mentorState, setMentorState] = useState(null);
 
@@ -31,7 +36,7 @@ const ListAll = () => {
                 <tbody>
                   {studentState.map((stud) => {
                     return (
-                      <tr key={stud.id}>
+                      <tr key={stud._id}>
                         <td>{stud.name}</td>
                         <td>{stud.email}</td>
                         <td>{stud.course}</td>
@@ -68,7 +73,7 @@ const ListAll = () => {
                 <tbody>
                   {mentorState.map((ment) => {
                     return (
-                      <tr key={ment.id}>
+                      <tr key={ment._id}>
                         <td>{ment.name}</td>
                         <td>{ment.email}</td>
                         <td>{ment.expertise}</td>
