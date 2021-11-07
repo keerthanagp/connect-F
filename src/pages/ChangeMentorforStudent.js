@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ListData from "../config/ListAll";
 import ChangingMentor from "../config/ChangingMentor";
+import AddingStudentsToMentor from "../config/AddingStudentsToMentor";
 
 const ChangeMentorforStudent = () => {
   const [mentor, setMentor] = useState("");
@@ -19,13 +20,32 @@ const ChangeMentorforStudent = () => {
   const submitForm = async () => {
     console.log(studentSelected, "studentsselected");
     console.log(mentorSelected, "mentorSelected");
-    const body = {
-      studentId: studentSelected,
-      newMentorId: mentorSelected,
-    };
-    const r = await ChangingMentor(body);
-    console.log(r, "result on Submit");
-    setResult(r);
+    const studData = student.filter((s) => {
+      return s._id === studentSelected;
+    });
+    const isAssigned = studData[0].mentorAssigned;
+    console.log(studData, "studData");
+    console.log(isAssigned, "isAssigned");
+
+    if (isAssigned) {
+      //this act as assign new mentor
+      const body = {
+        studentId: studentSelected,
+        newMentorId: mentorSelected,
+      };
+      const r = await ChangingMentor(body);
+      console.log(r, "result on Submit");
+      setResult(r);
+    } else {
+      //this acts as a modify mentor
+      const body = {
+        mentorId: mentorSelected,
+        studentsArray: new Array(studentSelected),
+      };
+      const r = await AddingStudentsToMentor(body);
+      console.log(r, "result on Submit");
+      setResult(r);
+    }
   };
 
   return (
