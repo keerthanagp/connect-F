@@ -42,7 +42,7 @@ const ListAll = () => {
                         <td>{stud.course}</td>
                         <td>
                           {stud.mentorAssigned
-                            ? stud.mentorAssigned
+                            ? "Mentor Assigned"
                             : "Not Assigned"}
                         </td>
                       </tr>
@@ -79,7 +79,7 @@ const ListAll = () => {
                         <td>{ment.expertise}</td>
                         <td>
                           {ment.studentsAssigned.length > 0
-                            ? "Assigned"
+                            ? "Students Assigned"
                             : "Not Assigned"}
                         </td>
                       </tr>

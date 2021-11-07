@@ -1,20 +1,32 @@
 import React, { useState, useEffect } from "react";
 import ListData from "../config/ListAll";
+import ChangingMentor from "../config/ChangingMentor";
 
 const ChangeMentorforStudent = () => {
   const [mentor, setMentor] = useState("");
   const [student, setStudent] = useState("");
+  const [studentSelected, setStudentSelected] = useState([]);
+  const [mentorSelected, setMentorSelected] = useState("");
+  const [result, setResult] = useState();
 
   useEffect(() => {
-    ListData().then((result) => {
-      setMentor(result.mentor);
-      setStudent(result.student);
-      return () => {
-        setMentor("");
-        setStudent("");
-      };
+    ListData().then((resultant) => {
+      setMentor(resultant.mentor);
+      setStudent(resultant.student);
     });
   }, []);
+
+  const submitForm = async () => {
+    console.log(studentSelected, "studentsselected");
+    console.log(mentorSelected, "mentorSelected");
+    const body = {
+      studentId: studentSelected,
+      newMentorId: mentorSelected,
+    };
+    const r = await ChangingMentor(body);
+    console.log(r, "result on Submit");
+    setResult(r);
+  };
 
   return (
     <div className="container">
@@ -22,7 +34,11 @@ const ChangeMentorforStudent = () => {
         <div className="col">
           <div>
             <label>Select Mentor</label>
-            <select>
+            <select
+              onChange={(ev) => {
+                setMentorSelected(ev.target.value);
+              }}
+            >
               <option>Select Mentor</option>
               {mentor &&
                 mentor.map((ment) => {
@@ -38,32 +54,46 @@ const ChangeMentorforStudent = () => {
 
         <div className="col">
           <div>
-            <label>Select Students</label>
+            <label>Select Student</label>
             {student && (
-              <ul style={{ listStyle: "none" }}>
-                {student.map((stud) => {
-                  return (
-                    <li key={stud._id}>
-                      <input type="checkbox" value={stud._id} />
-                      {stud.name}
-                    </li>
-                  );
-                })}
-              </ul>
+              <select
+                onChange={(ev) => {
+                  setStudentSelected(ev.target.value);
+                }}
+              >
+                <option>Select Student</option>
+                {student &&
+                  student.map((stud) => {
+                    return (
+                      <option value={stud._id} key={stud._id}>
+                        {stud.name}
+                      </option>
+                    );
+                  })}
+              </select>
             )}
-            {/* <select>
-              <option>Select Students</option>
-              {student &&
-                student.map((stud) => {
-                  return (
-                    <option value={stud._id} key={stud._id}>
-                      {stud.name}
-                    </option>
-                  );
-                })}
-            </select> */}
           </div>
         </div>
+        <div className="m-5 col">
+          <button type="button" onClick={() => submitForm()}>
+            Submit
+          </button>
+        </div>
+
+        {result && (
+          <div
+            id="liveToast"
+            className={result.status === 200 ? "toast show" : "toast"}
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
+          >
+            <div className="toast-header">
+              <strong className="me-auto">Status</strong>
+            </div>
+            <div className="toast-body">{result.data}</div>
+          </div>
+        )}
       </div>
     </div>
   );

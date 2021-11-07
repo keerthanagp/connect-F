@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from "react";
 import ListData from "../config/ListAll";
+import AddingStudentsToMentor from "../config/AddingStudentsToMentor";
 
 const AddStudentstoMentor = () => {
   const [mentor, setMentor] = useState("");
   const [student, setStudent] = useState("");
   const [studentsSelected, setStudentsSelected] = useState([]);
   const [mentorSelected, setMentorSelected] = useState("");
+  const [result, setResult] = useState();
 
   const onMountFunc = () => {
-    ListData()
-      .then((result) => {
-        setMentor(result.mentor);
-        setStudent(
-          result.student.filter((stud) => {
-            return !stud.mentorAssigned ? stud : null;
-          })
-        );
-      })
-      .then(() => console.log(student, " students from useEffect"));
+    ListData().then((resultant) => {
+      setMentor(resultant.mentor);
+      setStudent(
+        resultant.student.filter((stud) => {
+          return !stud.mentorAssigned ? stud : null;
+        })
+      );
+    });
   };
 
   useEffect(() => {
@@ -39,6 +39,18 @@ const AddStudentstoMentor = () => {
         }
       }
     });
+  };
+
+  const submitForm = async () => {
+    console.log(studentsSelected, "studentsselected");
+    console.log(mentorSelected, "mentorSelected");
+    const body = {
+      mentorId: mentorSelected,
+      studentsArray: studentsSelected,
+    };
+    const r = await AddingStudentsToMentor(body);
+    console.log(r, "result on Submit");
+    setResult(r);
   };
 
   return (
@@ -86,18 +98,27 @@ const AddStudentstoMentor = () => {
               </ul>
             )}
           </div>
+          <div className="m-3">
+            <button type="button" onClick={() => submitForm()}>
+              Submit
+            </button>
+          </div>
         </div>
-        <div>
-          <button
-            type="button"
-            onClick={() => {
-              console.log(studentsSelected, "studentsselected");
-              console.log(mentorSelected, "mentorSelected");
-            }}
+
+        {result && (
+          <div
+            id="liveToast"
+            className={result.status === 200 ? "toast show" : "toast"}
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
           >
-            Submit
-          </button>
-        </div>
+            <div className="toast-header">
+              <strong className="me-auto">Status</strong>
+            </div>
+            <div className="toast-body">{result.data}</div>
+          </div>
+        )}
       </div>
     </div>
   );
