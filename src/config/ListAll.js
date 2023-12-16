@@ -1,9 +1,9 @@
 import axios from "axios";
 
 const ListAll = async () => {
-  const mentor = await axios.get("https://eduhub-karthee.herokuapp.com/mentor");
+  const mentor = await axios.get("https://connect-hmuf.onrender.com/mentor");
   const student = await axios.get(
-    "https://eduhub-karthee.herokuapp.com/student"
+    "https://connect-hmuf.onrender.com/student"
   );
   const result = {
     mentor: mentor.data,
